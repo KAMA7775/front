@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ИИ жардамчы (ОВЗ адаптация)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            margin: 0; padding: 0;
+            color: #333;
+        }
+        header {
+            background: #00796b;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            user-select: none;
+        }
+        main {
+            max-width: 720px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+        }
+        label {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        select {
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+        }
+        #chat-window {
+            height: 350px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            user-select: text;
+        }
+        .user-msg {
+            background-color: #c8e6c9;
+            align-self: flex-end;
+            text-align: right;
+            margin-left: auto;
+        }
+        .bot-msg {
+            background-color: #bbdefb;
+            align-self: flex-start;
+            text-align: left;
+            margin-right: auto;
+        }
+        #input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            font-size: 1.1rem;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #00796b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        button:disabled {
+            background: #a5d6a7;
+            cursor: not-allowed;
+        }
+        #tts-response-btn {
+            background: #0288d1;
+            margin-bottom: 15px;
+            display: none;
+        }
+        #status {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    ИИ жардамчы — ОВЗ үчүн адаптацияланган
+</header>
+<main>
+    <label for="ovz-mode">Овз режими:</label>
+    <select id="ovz-mode" aria-label="Овз режими тандоо">
+        <option value="default">Жалпы режим</option>
+        <option value="slabovid">Слабовидящий (Көзү начар көргөндөр)</option>
+        <option value="intellekt">Интеллектуалдык мүмкүнчүлүгү чектелгендер</option>
+        <option value="slaboslysh">Слабослышащий (Угуу көйгөйлөрү)</option>
+    </select>
+
+    <div id="chat-window" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Сураныч, сурооңузду жазыңыз..." aria-label="Пайдалануучу суроо" />
+        <button id="send-btn" aria-label="Жөнөтүү баскычы">Жөнөтүү</button>
+        <button id="voice-btn" aria-label="Добуш менен жазуу" title="Добуш менен жазуу">&#127908;</button>
+    </div>
+
+    <button id="tts-response-btn" aria-label="Жоопту үн менен окуу">Жоопту окуу</button>
+
+    <div id="status" aria-live="polite"></div>
+</main>
+
+<script src="index.js"></script>
+</body>
+</html>
+
+
+
