@@ -26,7 +26,6 @@ function setStatus(text) {
     statusText.textContent = text;
 }
 
-
 function speak(text) {
     if (!window.speechSynthesis) {
         alert('Сиздин браузерде үн менен окуу колдоосу жок.');
@@ -37,7 +36,6 @@ function speak(text) {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-
     const voices = window.speechSynthesis.getVoices();
     const kyVoice = voices.find(v => v.lang.startsWith('ky') || v.lang.startsWith('ru'));
     if (kyVoice) {
@@ -105,9 +103,7 @@ function setupSpeechRecognition() {
 
 setupSpeechRecognition();
 
-
 function getPromptForMode(userText, mode) {
-
     switch (mode) {
         case 'slabovid':
             return `Сиз көзү начар көргөндөр үчүн жооп бериңиз. Текст чоң, түшүнүктүү жана жеңил болсун. Колдонуучу мындай деп сурады: "${userText}"`;
@@ -123,17 +119,25 @@ function getPromptForMode(userText, mode) {
 async function callGeminiAPI(promptText) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
     const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GEMINI_API_KEY}`
+        'Content-Type': 'application/json'
     };
+
     const body = JSON.stringify({
-        model: "gemini-1",
-        messages: [
-            { role: "user", content: promptText }
+        contents: [
+            {
+                parts: [
+                    {
+                        text: promptText
+                    }
+                ]
+            }
         ],
-        max_tokens: 500,
-        temperature: 0.7,
-        language: "ky"
+        generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500,
+            topP: 0.8,
+            topK: 10
+        }
     });
 
     try {
@@ -146,7 +150,7 @@ async function callGeminiAPI(promptText) {
             throw new Error('Сервер жооп бербеди: ' + response.status);
         }
         const data = await response.json();
-        const aiText = data.choices?.[0]?.message?.content || "Жооп жок";
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Жооп жок';
         return aiText;
     } catch (err) {
         console.error('API чакырууда ката:', err);
@@ -179,7 +183,6 @@ function renderHistory(history) {
 
 let chatHistory = loadHistory();
 renderHistory(chatHistory);
-
 
 sendBtn.onclick = async () => {
     const userText = userInput.value.trim();
@@ -215,10 +218,7 @@ userInput.addEventListener('keydown', (e) => {
 });
 
 ovzModeSelect.addEventListener('change', () => {
-    // Можно не чистить, но для простоты:
-    // chatHistory = [];
-    // saveHistory(chatHistory);
-    // renderHistory(chatHistory);
+    // Настройки при смене режима
 });
 
 
